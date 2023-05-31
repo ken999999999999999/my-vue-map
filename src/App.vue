@@ -1,11 +1,12 @@
 <template>
-  <div id="app">
+  <div id="app" style="padding: 20px">
     <LocationSearch
       @search="searchLocation"
       @current-location="getCurrentLocation"
     />
     <LocationMap :location="currentLocation" />
     <LocationTable :locations="locations" @delete="deleteLocations" />
+    <TimeZoneDisplay />
   </div>
 </template>
 
@@ -14,11 +15,14 @@ import { ref } from "vue"
 import LocationSearch from "./components/LocationSearch.vue"
 import LocationMap from "./components/LocationMap.vue"
 import LocationTable from "./components/LocationTable.vue"
+import TimeZoneDisplay from "./components/TimeZoneDisplay.vue"
+
 export default {
   components: {
     LocationSearch,
     LocationMap,
     LocationTable,
+    TimeZoneDisplay,
   },
   setup() {
     const locations = ref([])
@@ -27,7 +31,8 @@ export default {
     const searchLocation = (location) => {
       // TODO: Implement search functionality
       // Add the searched location to the locations array
-      locations.value.push({ name: location, isChecked: false })
+      console.log(location)
+      locations.value.unshift({ name: location, isChecked: false })
     }
 
     const getCurrentLocation = (coords) => {

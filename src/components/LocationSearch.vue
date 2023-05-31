@@ -1,29 +1,35 @@
 <template>
-  <div>
-    <input
-      type="text"
-      v-model="location"
-      @keyup.enter="searchLocation"
-      placeholder="Enter a location"
-    />
-    <n-button @click="searchLocation">Search</n-button>
-    <n-button @click="getCurrentLocation">Get Current Location</n-button>
+  <div style="margin: auto; width: 500px">
+    <n-input-group>
+      <n-input
+        type="text"
+        v-model:value="location"
+        @keyup.enter="searchLocation"
+        placeholder="Enter a location"
+      />
+      <n-button @click="searchLocation">Search</n-button>
+      <n-button @click="getCurrentLocation">Get Current Location</n-button>
+    </n-input-group>
   </div>
 </template>
 
 <script>
 import { ref } from "vue"
-import { NButton } from "naive-ui"
+import { NButton, NInput, NInputGroup } from "naive-ui"
 export default {
   components: {
     NButton,
+    NInput,
+    NInputGroup,
   },
   setup(_, context) {
     const location = ref("")
 
     const searchLocation = () => {
       // Emit the location to the parent component
+
       context.emit("search", location?.value ?? "")
+      location.value = ""
     }
 
     const getCurrentLocation = () => {

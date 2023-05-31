@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 500px; margin-top: 50px">
+  <div style="height: 500px; margin: 20px auto">
     <l-map
       style="height: 100%; width: 80%; margin: auto"
       :center="location"
@@ -10,7 +10,7 @@
         layer-type="base"
         name="OpenStreetMap"
       ></l-tile-layer>
-      <!-- <l-marker :lat-lng="location"></l-marker> -->
+      <l-marker :lat-lng="location"></l-marker>
     </l-map>
   </div>
 </template>

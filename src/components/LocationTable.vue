@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div style="width: 1100px; margin: auto">
     <n-data-table
       :columns="columns"
-      :data="data"
+      :data="locations"
       :pagination="pagination"
       :row-key="rowKey"
       @update:checked-row-keys="handleCheck"
