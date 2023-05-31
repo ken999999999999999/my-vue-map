@@ -41,7 +41,13 @@ export default {
         title: "Location",
         key: "name",
       },
-      { title: "Position", key: "position" },
+      {
+        title: "Position",
+        key: "position",
+        render(row) {
+          return `${row.position[0]}, ${row.position[1]}`
+        },
+      },
       {
         title: "Action",
         key: "actions",
