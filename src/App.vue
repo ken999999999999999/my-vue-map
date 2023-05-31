@@ -62,7 +62,7 @@ export default {
       try {
         isLoading.value = true
         const response = await axios.get(
-          `http://api.timezonedb.com/v2.1/get-time-zone?key=${process.env.VUE_APP_TIME_ZONE_API_KEY}&format=json&by=position&lat=${location[0]}&lng=${location[1]}`
+          `https://api.timezonedb.com/v2.1/get-time-zone?key=${process.env.VUE_APP_TIME_ZONE_API_KEY}&format=json&by=position&lat=${location[0]}&lng=${location[1]}`
         )
         timeZone.value = response.data.zoneName
         localTime.value = response.data.formatted
