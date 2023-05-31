@@ -1,7 +1,11 @@
 <template>
-  <div>
-    <div v-if="timeZone">Time Zone: {{ timeZone }}</div>
-    <div v-if="localTime">Local Time: {{ localTime }}</div>
+  <div style="margin-top: 10px">
+    <div v-if="timeZone" style="margin: auto; width: fit-content">
+      Time Zone: {{ timeZone }}
+    </div>
+    <div v-if="localTime" style="margin: auto; width: fit-content">
+      Local Time: {{ localTime }}
+    </div>
   </div>
 </template>
 
