@@ -4,9 +4,13 @@
       @search="searchLocation"
       @current-location="getCurrentLocation"
     />
+    <TimeZoneDisplay :location="currentLocation" />
     <LocationMap :location="currentLocation" />
-    <LocationTable :locations="locations" @delete="deleteLocations" />
-    <TimeZoneDisplay />
+    <LocationTable
+      :locations="locations"
+      @delete="deleteLocations"
+      @goto="goto"
+    />
   </div>
 </template>
 
@@ -31,7 +35,7 @@ export default {
     const searchLocation = (location) => {
       // TODO: Implement search functionality
       // Add the searched location to the locations array
-
+      currentLocation.value = location.position
       locations.value.unshift({
         name: location.name,
         position: location.position,
@@ -40,16 +44,21 @@ export default {
     }
 
     const getCurrentLocation = (coords) => {
-      currentLocation.value = [coords.lat, coords.lng]
-      searchLocation({ name: "Your Position", position: currentLocation })
+      searchLocation({
+        name: "Your Current Position",
+        position: [coords.lat, coords.lng],
+      })
     }
 
     const deleteLocations = (selectedLocations) => {
       // Remove the selected locations from the locations array
-      console.log(selectedLocations)
       locations.value = locations.value.filter(
         (location) => !selectedLocations.includes(location.name)
       )
+    }
+
+    const goto = (position) => {
+      currentLocation.value = position
     }
 
     return {
@@ -58,6 +67,7 @@ export default {
       searchLocation,
       getCurrentLocation,
       deleteLocations,
+      goto,
     }
   },
 }

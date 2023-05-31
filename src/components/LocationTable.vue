@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { ref } from "vue"
+import { ref, h } from "vue"
 import { NDataTable, NButton } from "naive-ui"
 
 export default {
@@ -42,7 +42,26 @@ export default {
         key: "name",
       },
       { title: "Position", key: "position" },
+      {
+        title: "Action",
+        key: "actions",
+
+        render(row) {
+          return h(
+            NButton,
+            {
+              size: "small",
+              onClick: () => goto(row),
+            },
+            { default: () => "Go" }
+          )
+        },
+      },
     ]
+
+    const goto = (row) => {
+      context.emit("goto", row.position)
+    }
 
     const deleteSelected = () => {
       // Emit the delete event to the parent component

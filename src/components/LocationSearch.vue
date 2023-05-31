@@ -28,6 +28,7 @@
 <script>
 import { ref } from "vue"
 import { NButton, NInput, NInputGroup } from "naive-ui"
+import axios from "axios"
 export default {
   components: {
     NButton,
@@ -39,14 +40,29 @@ export default {
     const location = ref("")
     const loadingRef = ref(false)
 
-    const searchLocation = () => {
+    const searchLocation = async () => {
       // Emit the location to the parent component
-      loadingRef.value = true
-      context.emit("search", { name: location?.value ?? "", position: "" })
-      location.value = ""
-      setTimeout(() => {
-        loadingRef.value = false
-      }, 2000)
+      try {
+        loadingRef.value = true
+        const searchKey = location.value.replace(" ", "+")
+        const response = await axios.get(
+          `https://api.opencagedata.com/geocode/v1/json?q=${searchKey}&key=${process.env.VUE_APP_API_KEY}&language=en&pretty=1`
+        )
+
+        const results = response.data?.results
+        if (!results.length) return
+        const data = results[0]
+        context.emit("search", {
+          name: location?.value ?? "",
+          position: [data.geometry.lat, data.geometry.lng],
+        })
+      } finally {
+        location.value = ""
+
+        setTimeout(() => {
+          loadingRef.value = false
+        }, 2000)
+      }
     }
 
     const getCurrentLocation = () => {
@@ -56,8 +72,6 @@ export default {
       } else {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            // Emit the coordinates to the parent component
-            console.log(position)
             context.emit("current-location", {
               lat: position.coords.latitude,
               lng: position.coords.longitude,

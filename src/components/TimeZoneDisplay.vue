@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p v-if="timeZone">Time Zone: {{ timeZone }}</p>
-    <p v-if="localTime">Local Time: {{ localTime }}</p>
+    <div v-if="timeZone">Time Zone: {{ timeZone }}</div>
+    <div v-if="localTime">Local Time: {{ localTime }}</div>
   </div>
 </template>
 
@@ -22,8 +22,9 @@ export default {
 
     const getTimeZone = async () => {
       try {
+        console.log("hit")
         const response = await axios.get(
-          `http://api.timezonedb.com/v2.1/get-time-zone?key=YOUR_API_KEY&format=json&by=position&lat=${props.location[0]}&lng=${props.location[1]}`
+          `http://api.timezonedb.com/v2.1/get-time-zone?key=${process.env.VUE_APP_TIME_ZONE_API_KEY}&format=json&by=position&lat=${props.location[0]}&lng=${props.location[1]}`
         )
         timeZone.value = response.data.zoneName
         localTime.value = response.data.formatted
