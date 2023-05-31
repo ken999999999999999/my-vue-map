@@ -6,9 +6,21 @@
         v-model:value="location"
         @keyup.enter="searchLocation"
         placeholder="Enter a location"
+        :loading="loading"
       />
-      <n-button @click="searchLocation">Search</n-button>
-      <n-button @click="getCurrentLocation">Get Current Location</n-button>
+
+      <n-button
+        @click="searchLocation"
+        icon-placement="left"
+        :disabled="loading || !location.length"
+        >Search</n-button
+      >
+      <n-button
+        @click="getCurrentLocation"
+        icon-placement="left"
+        :disabled="loading"
+        >Get Current Location</n-button
+      >
     </n-input-group>
   </div>
 </template>
@@ -22,23 +34,30 @@ export default {
     NInput,
     NInputGroup,
   },
+
   setup(_, context) {
     const location = ref("")
+    const loadingRef = ref(false)
 
     const searchLocation = () => {
       // Emit the location to the parent component
-
-      context.emit("search", location?.value ?? "")
+      loadingRef.value = true
+      context.emit("search", { name: location?.value ?? "", position: "" })
       location.value = ""
+      setTimeout(() => {
+        loadingRef.value = false
+      }, 2000)
     }
 
     const getCurrentLocation = () => {
+      loadingRef.value = true
       if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser")
       } else {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             // Emit the coordinates to the parent component
+            console.log(position)
             context.emit("current-location", {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
@@ -49,9 +68,12 @@ export default {
           }
         )
       }
+      setTimeout(() => {
+        loadingRef.value = false
+      }, 2000)
     }
 
-    return { location, searchLocation, getCurrentLocation }
+    return { loading: loadingRef, location, searchLocation, getCurrentLocation }
   },
 }
 </script>

@@ -1,5 +1,14 @@
 <template>
   <div style="width: 1100px; margin: auto">
+    <n-button
+      strong
+      secondary
+      type="error"
+      style="margin-bottom: 5px"
+      @click="deleteSelected"
+      :disabled="!checkedRowKeys.length"
+      >Delete</n-button
+    >
     <n-data-table
       :columns="columns"
       :data="locations"
@@ -12,7 +21,7 @@
 
 <script>
 import { ref } from "vue"
-import { NDataTable } from "naive-ui"
+import { NDataTable, NButton } from "naive-ui"
 
 export default {
   props: {
@@ -21,26 +30,26 @@ export default {
       required: true,
     },
   },
-  components: { NDataTable },
+  components: { NDataTable, NButton },
 
-  setup() {
+  setup(_, context) {
     const checkedRowKeysRef = ref([])
 
     const columns = [
-      { title: "", key: "isChecked" },
+      { type: "selection", key: "isChecked" },
       {
         title: "Location",
         key: "name",
       },
+      { title: "Position", key: "position" },
     ]
 
-    // const deleteSelected = () => {
-    //   // Emit the delete event to the parent component
-    //   context.emit(
-    //     "delete",
-    //     props.locations.filter((location) => location.isChecked)
-    //   )
-    // }
+    const deleteSelected = () => {
+      // Emit the delete event to the parent component
+
+      context.emit("delete", checkedRowKeysRef.value)
+      checkedRowKeysRef.value = []
+    }
 
     return {
       columns,
@@ -48,7 +57,8 @@ export default {
       pagination: {
         pageSize: 5,
       },
-      rowKey: (row) => row.address,
+      deleteSelected,
+      rowKey: (row) => row.name,
       handleCheck(rowKeys) {
         checkedRowKeysRef.value = rowKeys
       },

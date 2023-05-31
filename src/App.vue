@@ -26,23 +26,29 @@ export default {
   },
   setup() {
     const locations = ref([])
-    const currentLocation = ref([0, 0])
+    const currentLocation = ref([40, 40])
 
     const searchLocation = (location) => {
       // TODO: Implement search functionality
       // Add the searched location to the locations array
-      console.log(location)
-      locations.value.unshift({ name: location, isChecked: false })
+
+      locations.value.unshift({
+        name: location.name,
+        position: location.position,
+        isChecked: false,
+      })
     }
 
     const getCurrentLocation = (coords) => {
       currentLocation.value = [coords.lat, coords.lng]
+      searchLocation({ name: "Your Position", position: currentLocation })
     }
 
     const deleteLocations = (selectedLocations) => {
       // Remove the selected locations from the locations array
+      console.log(selectedLocations)
       locations.value = locations.value.filter(
-        (location) => !selectedLocations.includes(location)
+        (location) => !selectedLocations.includes(location.name)
       )
     }
 

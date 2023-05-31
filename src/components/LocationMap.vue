@@ -3,13 +3,9 @@
     <l-map
       style="height: 100%; width: 80%; margin: auto"
       :center="location"
-      :zoom="2"
+      :zoom="zoom"
     >
-      <l-tile-layer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        layer-type="base"
-        name="OpenStreetMap"
-      ></l-tile-layer>
+      <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <l-marker :lat-lng="location"></l-marker>
     </l-map>
   </div>
@@ -17,18 +13,27 @@
 
 <script>
 import "leaflet/dist/leaflet.css"
-import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet"
+import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet"
 
 export default {
   components: {
     LMap,
     LTileLayer,
+    LMarker,
   },
   props: {
     location: {
       type: Array,
       required: true,
     },
+  },
+  data() {
+    return {
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution:
+        '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      zoom: 10,
+    }
   },
 }
 </script>
