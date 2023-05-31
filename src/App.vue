@@ -1,26 +1,53 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <LocationSearch
+      @search="searchLocation"
+      @current-location="getCurrentLocation"
+    />
+    <LocationMap :location="currentLocation" />
+    <LocationTable :locations="locations" @delete="deleteLocations" />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import { ref } from "vue"
+import LocationSearch from "./components/LocationSearch.vue"
+import LocationMap from "./components/LocationMap.vue"
+import LocationTable from "./components/LocationTable.vue"
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
+    LocationSearch,
+    LocationMap,
+    LocationTable,
+  },
+  setup() {
+    const locations = ref([])
+    const currentLocation = ref([0, 0])
+
+    const searchLocation = (location) => {
+      // TODO: Implement search functionality
+      // Add the searched location to the locations array
+      locations.value.push({ name: location, isChecked: false })
+    }
+
+    const getCurrentLocation = (coords) => {
+      currentLocation.value = [coords.lat, coords.lng]
+    }
+
+    const deleteLocations = (selectedLocations) => {
+      // Remove the selected locations from the locations array
+      locations.value = locations.value.filter(
+        (location) => !selectedLocations.includes(location)
+      )
+    }
+
+    return {
+      locations,
+      currentLocation,
+      searchLocation,
+      getCurrentLocation,
+      deleteLocations,
+    }
+  },
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
